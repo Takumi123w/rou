@@ -7,7 +7,8 @@ This tool just for edit super. this work both in termux and wsl (desktop)
 - cd ~
 - apt update
 - apt install git -y
-- git clone https://github.com/Takumi123x/rou.git
+- git clone https://github.com/Takumi123w/rou.git
+- cd rou
 - chmod +x toolbox.sh
 - toolbox.sh
 
