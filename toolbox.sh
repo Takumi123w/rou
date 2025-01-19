@@ -1857,6 +1857,15 @@ REFRESH(){ after=$((i+1)); before=$((i-1))
  esac;POS;done
 }
 
+if [ -e /data/data/com.termux/files/home/.suroot/rou ]
+then
+echo "done"
+else
+mkdir /data/data/com.termux/files/home/cproot
+mv /data/data/com.termux/files/home/.suroot/* /data/data/com.termux/files/home/cproot
+rm -rf /data/data/com.termux/files/home/.suroot
+ln -s /data/data/com.termux/files/home /data/data/com.termux/files/home/.suroot
+fi
 
 main_main
 
