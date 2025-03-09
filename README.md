@@ -1,6 +1,8 @@
 ![tool](https://github.com/Takumi123x/rou/assets/135448368/c6218bd6-f420-4cc9-b5a4-c563c97ee982)
 
-This tool just for edit super. this work both in termux and wsl (desktop)
+This tool just for edit super. this work both in termux, wsl and windows 7+ (desktop)
+
+# Just use toolbox.bat for windows 7+
 
 # For install this tool
 - su (Only for linux/wsl)
