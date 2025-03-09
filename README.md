@@ -2,7 +2,7 @@
 
 This tool just for edit super. this work both in termux, wsl and windows 7+ (desktop)
 
-# Just use toolbox.bat for windows 7+
+# Use toolbox.bat for windows 7+
 
 # For install this tool
 - su (Only for linux/wsl)
