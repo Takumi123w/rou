@@ -6,6 +6,7 @@ del fake\tar.txt
 del fake\tar.gz.txt
 del fake\tar.xz.txt
 del fake\7z.txt
+
 :MENU
 cls
 @echo off & setlocal enabledelayedexpansion
@@ -67,20 +68,23 @@ type fake\profile\super_map.txt | grep "Size:" | sed "s/Size://g" | sed "s/bytes
 	powershell -NoProfile -Command "type fake\profile\super_map.txt | .\grep "Maximum" | Select-Object -Index 1" | sed "s/Maximum size://g" | sed "s/bytes//g" | sed "s/ //g" > fake\profile\main.txt
 goto BUILDMENU
 )
-
-:SUPERMENU
-cls
-@echo off & setlocal enabledelayedexpansion
-set "menu[0]=Extract from folder build       "
-set "menu[1]=Back to Main menu               "
-set "menu[2]="
-set "menu[3]="
-
-set "default=0"
-
-powershell -noprofile "iex (gc \"%~f0\" | out-string)"
-
-if %ERRORLEVEL% EQU 0 (
+:EXTRACTMODE
+if exist "build-kitchen\AP_*.tar.md5" (
+move build-kitchen\AP_*.tar.md5 build-kitchen\AP_Temp.tar
+) else (
+echo Not have tar files
+)
+if exist "build-kitchen\AP_*.tar" (
+deb\7z\7za x build-kitchen\AP_*.tar -obuild-kitchen -r super.img.lz4
+) else (
+echo Not have tar files
+)
+if exist "build-kitchen\super.img.lz4" (
+deb\7z\lz4 build-kitchen\super.img.lz4 build-kitchen\super.img
+del "build-kitchen\super.img.lz4"
+) else (
+echo Not have lz4 files
+)
 simg2img ./build-kitchen/super.img ./build-kitchen/super.raw.img
 call cmd /c "stat build-kitchen\super.raw.img | grep "Size" | sed "s/Size://g" | sed "s/ Regular File//g" | sed "s/ //g" " > fake\temp_output.txt
 set "size_var="
@@ -100,7 +104,21 @@ type fake\profile\super_map.txt | grep "Size:" | sed "s/Size://g" | sed "s/bytes
 	powershell -NoProfile -Command "type fake\profile\super_map.txt | .\grep "Maximum" | Select-Object -Index 1" | sed "s/Maximum size://g" | sed "s/bytes//g" | sed "s/ //g" > fake\profile\main.txt
 )
 pause
-goto MENU
+goto SUPERMENU
+:SUPERMENU
+cls
+@echo off & setlocal enabledelayedexpansion
+set "menu[0]=Extract from folder build       "
+set "menu[1]=Back to Main menu               "
+set "menu[2]="
+set "menu[3]="
+
+set "default=0"
+
+powershell -noprofile "iex (gc \"%~f0\" | out-string)"
+
+if %ERRORLEVEL% EQU 0 (
+	goto EXTRACTMODE
 )
 
 if %ERRORLEVEL% EQU 1 (
@@ -342,7 +360,7 @@ $menu = gci env: | ?{ $_.Name -match "^menu\[\d+\]$" } | %{
 $h = $Host.UI.RawUI.WindowSize.Height
 $w = $Host.UI.RawUI.WindowSize.Width
 $test = ./stat ./build-kitchen/super.img | ./grep "Size" | ./sed "s/Size/Super size/g" | ./sed "s/ Regular File//g"
-$logical = type fake\profile\main.txt
+$logical = powershell -Command "if (Test-Path fake\profile\main.txt) { type fake\profile\main.txt } else { echo '' }"
 $system = ./stat ./build-kitchen/system.img | ./grep "Size" | ./sed "s/Size/System size/g" | ./sed "s/ Regular File//g"
 $system_ext = ./stat ./build-kitchen/system_ext.img | ./grep "Size" | ./sed "s/Size/System ext size/g" | ./sed "s/ Regular File//g"
 $odm = ./stat ./build-kitchen/odm.img | ./grep "Size" | ./sed "s/Size/Odm size/g" | ./sed "s/ Regular File//g"
