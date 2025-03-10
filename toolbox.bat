@@ -96,9 +96,13 @@ move "build-kitchen\super.raw.img" "build-kitchen\super.img"
     echo no
 )
 if exist build-kitchen\super.img (
+if exist fake\odm_only.txt (
 lpunpack -p vendor ./build-kitchen/super.img ./build-kitchen/
 lpunpack -p odm ./build-kitchen/super.img ./build-kitchen/
 lpunpack -p system_ext ./build-kitchen/super.img ./build-kitchen/
+) else (
+lpunpack ./build-kitchen/super.img ./build-kitchen/
+)
 lpdump ./build-kitchen/super.img > fake\profile\super_map.txt
 type fake\profile\super_map.txt | grep "Size:" | sed "s/Size://g" | sed "s/bytes//g" | sed "s/ //g" > fake\profile\super.txt
 	powershell -NoProfile -Command "type fake\profile\super_map.txt | .\grep "Maximum" | Select-Object -Index 1" | sed "s/Maximum size://g" | sed "s/bytes//g" | sed "s/ //g" > fake\profile\main.txt
@@ -140,8 +144,12 @@ if %ERRORLEVEL% GEQ 4 (
 cls
 @echo off & setlocal enabledelayedexpansion
 set "menu[0]=Clear profile                   "
-set "menu[1]=Back to Main menu               "
-set "menu[2]="
+if exist fake\odm_only.txt (
+set "menu[1]=All partitions                  "
+) else (
+set "menu[1]=Odm vendor only                 "
+)
+set "menu[2]=Back to Main menu               "
 set "menu[3]="
 
 set "default=0"
@@ -158,11 +166,16 @@ goto OPTIONS
 )
 
 if %ERRORLEVEL% EQU 1 (
-goto MENU
+if exist fake\odm_only.txt (
+del fake\odm_only.txt
+) else (
+echo " " > fake\odm_only.txt
+)
+goto OPTIONS
 )
 
 if %ERRORLEVEL% EQU 2 (
-goto OPTIONS
+goto MENU
 )
 
 if %ERRORLEVEL% EQU 3 (
