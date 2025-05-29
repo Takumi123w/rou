@@ -11,6 +11,16 @@ This tool just for edit super. this work both in termux and wsl (desktop)
 - chmod +x toolbox.sh
 - toolbox.sh
 
+# For install this tool (WSL / Linux)
+- su
+- cd ~
+- apt update
+- apt install git -y
+- git clone https://github.com/Takumi123w/rou.git
+- cd rou
+- chmod +x toolbox.sh
+- toolbox.sh
+
 # If root mode (Termux only)
 - Do clone repo before use root method
 - tsu
