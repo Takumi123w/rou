@@ -2,8 +2,10 @@
 
 This tool just for edit super. this work both in termux and wsl (desktop)
 
-# For install this tool
+# For WSL or Linux need root
 - su (Only for linux/wsl)
+
+# For install this tool (Not root)
 - cd ~
 - apt update
 - apt install git -y
