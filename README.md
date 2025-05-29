@@ -11,6 +11,16 @@ This tool just for edit super. this work both in termux and wsl (desktop)
 - chmod +x toolbox.sh
 - toolbox.sh
 
+# If root mode (Termux only)
+- Do clone repo before use root method
+- tsu
+- cd /data/data/com.termux/files/home/
+- rm -rf ./.suroot
+- ln -s ./ ./.suroot
+- chmod +x ~/rou/toolbox.sh
+- ln -s ~/rou/toolbox.sh ~/
+- toolbox.sh
+
 # For install this tool (WSL / Linux)
 - su
 - cd ~
@@ -21,14 +31,7 @@ This tool just for edit super. this work both in termux and wsl (desktop)
 - chmod +x toolbox.sh
 - toolbox.sh
 
-# If root mode (Termux only)
-- Do clone repo before use root method
-- tsu
-- cd /data/data/com.termux/files/home/
-- rm -rf ./.suroot
-- ln -s ./ ./.suroot
-- chmod +x ~/rou/toolbox.sh
-- ln -s ~/rou/toolbox.sh ~/
-- toolbox.sh
+# For windows 7+ ( powershell )
+- Just download and open toolbox.bat
 
 For tutorial video watch in youtube channel [TakuruKagami](https://m.youtube.com/@TakuruKagami)
