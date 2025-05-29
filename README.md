@@ -2,8 +2,9 @@
 
 This tool just for edit super. this work both in termux and wsl (desktop)
 
-# For WSL or Linux need root
+# For WSL or Linux need su
 - su (Only for linux/wsl)
+and follow method in bellow
 
 # For install this tool (Not root)
 - cd ~
