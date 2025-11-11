@@ -9,7 +9,7 @@ This tool just for edit super. this work both in termux and wsl (desktop)
 - git clone https://github.com/Takumi123w/rou.git
 - cd rou
 - chmod +x toolbox.sh
-- toolbox.sh
+- ./toolbox.sh
 
 # If root mode (Termux only)
 - Do clone repo before use root method
@@ -19,7 +19,7 @@ This tool just for edit super. this work both in termux and wsl (desktop)
 - ln -s ./ ./.suroot
 - chmod +x ~/rou/toolbox.sh
 - ln -s ~/rou/toolbox.sh ~/
-- toolbox.sh
+- ./toolbox.sh
 
 # For install this tool (WSL / Linux)
 - su
@@ -29,7 +29,7 @@ This tool just for edit super. this work both in termux and wsl (desktop)
 - git clone https://github.com/Takumi123w/rou.git
 - cd rou
 - chmod +x toolbox.sh
-- toolbox.sh
+- ./toolbox.sh
 
 # For windows 7+ ( powershell )
 - Just download and open toolbox.bat
