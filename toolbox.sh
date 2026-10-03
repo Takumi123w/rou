@@ -627,7 +627,7 @@ REFRESH(){ after=$((i+1)); before=$((i-1))
         3) S=M3;SC;if [[ $cur == "" ]];then R;clear;main_main;fi;;
  esac;POS;done
 else
-dirf=$(pwd)/rou/fake/profile
+dirf=$(pwd)/fake/profile
 clear
 TPUT  6 1;ls -x $dirf
 UNMARK
@@ -652,7 +652,7 @@ fontceti
 build_manual
 ;;
 *)
-cp -rf $(pwd)/rou/fake/profile/$p $(pwd)/kitchen-tmp/
+cp -rf $(pwd)/fake/profile/$p $(pwd)/kitchen-tmp/
 mv -f $(pwd)/kitchen-tmp/$p $(pwd)/kitchen-tmp/super_map.txt
 printf "$(<$(pwd)/kitchen-tmp/super_map.txt)" | grep -e "Size:" | awk '{print $2}' > $(pwd)/kitchen-tmp/super.txt
 printf "$(<$(pwd)/kitchen-tmp/super_map.txt)" | grep -e "Maximum size:" | awk '{print $3}' | sed '2!d' > $(pwd)/kitchen-tmp/main.txt
@@ -665,7 +665,7 @@ fi
 
 Extract_rom (){
 save_profile (){
-dirf=$(pwd)/rou/fake/profile
+dirf=$(pwd)/fake/profile
 TPUT  6 1;ls -x $dirf
 UNMARK
 TPUT  1 1;$e " |Profile| ";
@@ -683,7 +683,7 @@ clear
 fontceti
 ;;
 *)
-cp -rf $(pwd)/kitchen-tmp/super_map.txt $(pwd)/rou/fake/profile/$p
+cp -rf $(pwd)/kitchen-tmp/super_map.txt $(pwd)/fake/profile/$p
 clear
 Build_rom
 ;;
