@@ -1516,15 +1516,15 @@ fi
 else
 if [ "$(getprop ro.product.cpu.abi)" == "armeabi-v7a" ]
 then
-dpkg -i $(pwd)/rou/deb/arm32/android-tools.deb
-dpkg -i $(pwd)/rou/deb/arm32/abseil-cpp.deb
-dpkg -i $(pwd)/rou/deb/arm32/brotli.deb
-dpkg -i $(pwd)/rou/deb/arm32/liblz4.deb
-dpkg -i $(pwd)/rou/deb/arm32/libprotobuff.deb
-dpkg -i $(pwd)/rou/deb/arm32/lz4.deb
-dpkg -i $(pwd)/rou/deb/arm32/libusb.deb
-dpkg -i $(pwd)/rou/deb/arm32/zstd.deb
-dpkg -i $(pwd)/rou/deb/arm32/p7zip.deb
+dpkg -i $(pwd)/deb/arm32/android-tools.deb
+dpkg -i $(pwd)/deb/arm32/abseil-cpp.deb
+dpkg -i $(pwd)/deb/arm32/brotli.deb
+dpkg -i $(pwd)/deb/arm32/liblz4.deb
+dpkg -i $(pwd)/deb/arm32/libprotobuff.deb
+dpkg -i $(pwd)/deb/arm32/lz4.deb
+dpkg -i $(pwd)/deb/arm32/libusb.deb
+dpkg -i $(pwd)/deb/arm32/zstd.deb
+dpkg -i $(pwd)/deb/arm32/p7zip.deb
 echo "/storage/emulated/0/build-kitchen" > $(pwd)/rou/pc.txt
 internal_root="$(echo "$(<$(pwd)/rou/pc.txt)")"
 echo "binary installed" > $(pwd)/rou/complete.txt
@@ -1532,15 +1532,15 @@ termux-setup-storage
 else
 if [ "$(getprop ro.product.cpu.abi)" == "arm64-v8a" ]
 then
-dpkg -i $(pwd)/rou/deb/arm64/android-tools.deb
-dpkg -i $(pwd)/rou/deb/arm64/abseil-cpp.deb
-dpkg -i $(pwd)/rou/deb/arm64/brotli.deb
-dpkg -i $(pwd)/rou/deb/arm64/liblz4.deb
-dpkg -i $(pwd)/rou/deb/arm64/libprotobuff.deb
-dpkg -i $(pwd)/rou/deb/arm64/lz4.deb
-dpkg -i $(pwd)/rou/deb/arm64/libusb.deb
-dpkg -i $(pwd)/rou/deb/arm64/zstd.deb
-dpkg -i $(pwd)/rou/deb/arm64/p7zip.deb
+dpkg -i $(pwd)/deb/arm64/android-tools.deb
+dpkg -i $(pwd)/deb/arm64/abseil-cpp.deb
+dpkg -i $(pwd)/deb/arm64/brotli.deb
+dpkg -i $(pwd)/deb/arm64/liblz4.deb
+dpkg -i $(pwd)/deb/arm64/libprotobuff.deb
+dpkg -i $(pwd)/deb/arm64/lz4.deb
+dpkg -i $(pwd)/deb/arm64/libusb.deb
+dpkg -i $(pwd)/deb/arm64/zstd.deb
+dpkg -i $(pwd)/deb/arm64/p7zip.deb
 echo "/storage/emulated/0/build-kitchen" > $(pwd)/rou/pc.txt
 internal_root="$(echo "$(<$(pwd)/rou/pc.txt)")"
 echo "binary installed" > $(pwd)/rou/complete.txt
@@ -1548,7 +1548,7 @@ termux-setup-storage
 else
 if [ "$(dpkg --print-architecture)" == "amd64" ]
 then
-cp -f $(pwd)/rou/deb/PC/* /bin
+cp -f $(pwd)/deb/PC/* /bin
 clear
 echo "/" > $(pwd)/rou/pc.txt
 internal_root="$(echo "$(<$(pwd)/rou/pc.txt)")"
@@ -1664,8 +1664,8 @@ main_main
 fi
 ;;
 esac
-chmod +x $(pwd)/rou/deb/PC/*
-cp $(pwd)/rou/deb/PC/* /bin
+chmod +x $(pwd)/deb/PC/*
+cp $(pwd)/deb/PC/* /bin
 chmod +x $(pwd)/bin/lpmake
 chmod +x $(pwd)/bin/lpunpack
 chmod +x $(pwd)/bin/lpadd
@@ -1794,8 +1794,8 @@ main_main
 fi
 ;;
 esac
-chmod +x $(pwd)/rou/deb/PC/*
-cp $(pwd)/rou/deb/PC/* /bin
+chmod +x $(pwd)/deb/PC/*
+cp $(pwd)/deb/PC/* /bin
 chmod +x $(pwd)/bin/lpmake
 chmod +x $(pwd)/bin/lpunpack
 chmod +x $(pwd)/bin/lpadd
