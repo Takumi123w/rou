@@ -19,15 +19,14 @@
 - ln -s ~/rou/toolbox.sh ~/
 - toolbox.sh
 
-# For install this tool (WSL / Linux)
-- su
+# For install this tool (Linux)
 - cd ~
-- apt update
-- apt install git -y
+- sudo apt update
+- sudo apt install git -y
 - git clone https://github.com/Takumi123w/rou.git
 - cd rou
-- chmod +x toolbox.sh
-- toolbox.sh
+- sudo chmod +x toolbox.sh
+- ./toolbox.sh
 
 # For windows 7+ ( powershell )
 - Just download and open toolbox.bat
