@@ -29,6 +29,7 @@ This tool just for edit super. this work both in termux and wsl (desktop)
 - cd rou
 - sudo chmod +x toolbox.sh
 - ./toolbox.sh
+
 if this method use cd rou and ./toolbox.sh each want executre the toolbox sh
 
 # For windows 7+ (powershell)
