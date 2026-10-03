@@ -1873,6 +1873,6 @@ mv /data/data/com.termux/files/home/.suroot/* /data/data/com.termux/files/home/c
 rm -rf /data/data/com.termux/files/home/.suroot
 ln -s /data/data/com.termux/files/home /data/data/com.termux/files/home/.suroot
 fi
-
+ 
 main_main
 
