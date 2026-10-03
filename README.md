@@ -21,8 +21,7 @@ This tool just for edit super. this work both in termux and wsl (desktop)
 - ln -s ~/rou/toolbox.sh ~/
 - ./toolbox.sh
 
-# For install this tool (WSL / Linux)
-- su
+# For install this tool (Linux)
 - cd ~
 - apt update
 - apt install git -y
@@ -31,7 +30,7 @@ This tool just for edit super. this work both in termux and wsl (desktop)
 - chmod +x toolbox.sh
 - ./toolbox.sh
 
-# For windows 7+ ( powershell )
+# For windows 7+ (powershell)
 - Just download and open toolbox.bat
 
 For tutorial video watch in youtube channel [TakuruKagami](https://m.youtube.com/@TakuruKagami)
