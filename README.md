@@ -23,11 +23,11 @@ This tool just for edit super. this work both in termux and wsl (desktop)
 
 # For install this tool (Linux)
 - cd ~
-- apt update
-- apt install git -y
+- sudo apt update
+- sudo apt install git -y
 - git clone https://github.com/Takumi123w/rou.git
 - cd rou
-- chmod +x toolbox.sh
+- sudo chmod +x toolbox.sh
 - ./toolbox.sh
 
 # For windows 7+ (powershell)
