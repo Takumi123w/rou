@@ -39,21 +39,21 @@ fi
 
 if [ -e odm.img ]
 then
-echo "$(($(ls -nl odm.img | awk '{print $5}') + 2621440 +$(ls -nl system.img | awk '{print $5}') + $(ls -nl vendor.img | awk '{print $5}')))" > ~/kitchen-tmp/main.txt
+echo "$(($(ls -nl odm.img | awk '{print $5}') + 2621440 +$(ls -nl system.img | awk '{print $5}') + $(ls -nl vendor.img | awk '{print $5}')))" > $(pwd)/kitchen-tmp/main.txt
 else
 if [ -e system_ext.img ]
 then
-echo "$((2621440 + 2621440 +$(ls -nl system.img | awk '{print $5}') + $(ls -nl vendor.img | awk '{print $5}')))" > ~/kitchen-tmp/main.txt
+echo "$((2621440 + 2621440 +$(ls -nl system.img | awk '{print $5}') + $(ls -nl vendor.img | awk '{print $5}')))" > $(pwd)/kitchen-tmp/main.txt
 fi
 fi
 
 if [ -e odm.img ]
 then
-lpmake --metadata-size 65536 --super-name super --metadata-slots 2 --device super:$(<~/kitchen-tmp/super.txt) --group main:$(<~/kitchen-tmp/main.txt) --partition system:readonly:$(ls -nl $internal_root/system.img | awk '{print $5}'):main --image system=$internal_root/system.img --partition vendor:readonly:$(ls -nl $internal_root/vendor.img | awk '{print $5}'):main --image vendor=$internal_root/vendor.img --partition product:readonly:$(ls -nl $internal_root/product.img | awk '{print $5}'):main --image product=$internal_root/product.img --partition odm:readonly:$(ls -nl $internal_root/odm.img | awk '{print $5}'):main --image odm=$internal_root/odm.img --sparse --output super.img
+lpmake --metadata-size 65536 --super-name super --metadata-slots 2 --device super:$(<$(pwd)/kitchen-tmp/super.txt) --group main:$(<$(pwd)/kitchen-tmp/main.txt) --partition system:readonly:$(ls -nl $internal_root/system.img | awk '{print $5}'):main --image system=$internal_root/system.img --partition vendor:readonly:$(ls -nl $internal_root/vendor.img | awk '{print $5}'):main --image vendor=$internal_root/vendor.img --partition product:readonly:$(ls -nl $internal_root/product.img | awk '{print $5}'):main --image product=$internal_root/product.img --partition odm:readonly:$(ls -nl $internal_root/odm.img | awk '{print $5}'):main --image odm=$internal_root/odm.img --sparse --output super.img
 else
 if [ -e system_ext.img ]
 then
-lpmake --metadata-size 65536 --super-name super --metadata-slots 2 --device super:$(<~/kitchen-tmp/super.txt) --group main:$(<~/kitchen-tmp/main.txt) --partition system:readonly:$(ls -nl $internal_root/system.img | awk '{print $5}'):main --image system=$internal_root/system.img --partition vendor:readonly:$(ls -nl $internal_root/vendor.img | awk '{print $5}'):main --image vendor=$internal_root/vendor.img --partition product:readonly:$(ls -nl $internal_root/product.img | awk '{print $5}'):main --image product=$internal_root/product.img --partition system_ext:readonly:$(ls -nl $internal_root/system_ext.img | awk '{print $5}'):main --image system_ext=$internal_root/system_ext.img --sparse --output super.img
+lpmake --metadata-size 65536 --super-name super --metadata-slots 2 --device super:$(<$(pwd)/kitchen-tmp/super.txt) --group main:$(<$(pwd)/kitchen-tmp/main.txt) --partition system:readonly:$(ls -nl $internal_root/system.img | awk '{print $5}'):main --image system=$internal_root/system.img --partition vendor:readonly:$(ls -nl $internal_root/vendor.img | awk '{print $5}'):main --image vendor=$internal_root/vendor.img --partition product:readonly:$(ls -nl $internal_root/product.img | awk '{print $5}'):main --image product=$internal_root/product.img --partition system_ext:readonly:$(ls -nl $internal_root/system_ext.img | awk '{print $5}'):main --image system_ext=$internal_root/system_ext.img --sparse --output super.img
 fi
 fi
 }
@@ -87,7 +87,7 @@ main_main
 *)
 case $p in
     ''|*[!0-9]*) echo "Must number";read -t 5;build_manual ;;
-    *) echo "$p" > ~/kitchen-tmp/super.txt ;;
+    *) echo "$p" > $(pwd)/kitchen-tmp/super.txt ;;
 esac
 ;;
 esac
@@ -118,7 +118,7 @@ TPUT  10 2; $e "║                                       ║";
 TPUT  11 2; $e "║                                       ║";
 TPUT  12 2; $e "║                                       ║";
 TPUT  13 2; $e "╚═══════════════════════════════════════╝";
-TPUT   6 3; $e "Super size : $(if [ -e ~/kitchen-tmp/super.txt ];then echo "$(<~/kitchen-tmp/super.txt)";fi)"
+TPUT   6 3; $e "Super size : $(if [ -e $(pwd)/kitchen-tmp/super.txt ];then echo "$(<$(pwd)/kitchen-tmp/super.txt)";fi)"
 TPUT   8 3; $e "System size : $(if [ -e $internal_root/system.img ];then ls -nl $internal_root/system.img | awk '{print $5}';fi)"
 TPUT   9 3; $e "Vendor size : $(if [ -e $internal_root/vendor.img ];then ls -nl $internal_root/vendor.img | awk '{print $5}';fi)"
 TPUT  10 3; $e "Product size : $(if [ -e $internal_root/product.img ];then ls -nl $internal_root/product.img | awk '{print $5}';fi)"
@@ -155,7 +155,7 @@ REFRESH(){ after=$((i+1)); before=$((i-1))
  esac;POS;done
 }
 
-if grep -R "Super" ~/kitchen-tmp/super_map.txt
+if grep -R "Super" $(pwd)/kitchen-tmp/super_map.txt
 then
 failed_build (){
 clear
@@ -296,33 +296,33 @@ echo " "
 fi
 fi
 
-if grep -R "odm" ~/kitchen-tmp/super_map.txt
+if grep -R "odm" $(pwd)/kitchen-tmp/super_map.txt
 then
 if [ -e $internal_root/product.img ]
 then
 echo " "
 else
-cp -rf ~/rou/fake/product.img $internal_root/
+cp -rf $(pwd)/rou/fake/product.img $internal_root/
 fi
-lpmake --metadata-size 65536 --super-name super --metadata-slots 2 --device super:$(<~/kitchen-tmp/super.txt) --group main:$(<~/kitchen-tmp/main.txt) --partition system:readonly:$(ls -nl $internal_root/system.img | awk '{print $5}'):main --image system=$internal_root/system.img --partition vendor:readonly:$(ls -nl $internal_root/vendor.img | awk '{print $5}'):main --image vendor=$internal_root/vendor.img --partition product:readonly:$(ls -nl $internal_root/product.img | awk '{print $5}'):main --image product=$internal_root/product.img --partition odm:readonly:$(ls -nl $internal_root/odm.img | awk '{print $5}'):main --image odm=$internal_root/odm.img --sparse --output super.img
+lpmake --metadata-size 65536 --super-name super --metadata-slots 2 --device super:$(<$(pwd)/kitchen-tmp/super.txt) --group main:$(<$(pwd)/kitchen-tmp/main.txt) --partition system:readonly:$(ls -nl $internal_root/system.img | awk '{print $5}'):main --image system=$internal_root/system.img --partition vendor:readonly:$(ls -nl $internal_root/vendor.img | awk '{print $5}'):main --image vendor=$internal_root/vendor.img --partition product:readonly:$(ls -nl $internal_root/product.img | awk '{print $5}'):main --image product=$internal_root/product.img --partition odm:readonly:$(ls -nl $internal_root/odm.img | awk '{print $5}'):main --image odm=$internal_root/odm.img --sparse --output super.img
 else
 echo "Profile not include ODM device maybe exynos or unisoc"
 echo "Try change how build it"
-if grep -R "system_ext" ~/kitchen-tmp/super_map.txt
+if grep -R "system_ext" $(pwd)/kitchen-tmp/super_map.txt
 then
 if [ -e $internal_root/product.img ]
 then
 echo " "
 else
-cp -rf ~/rou/fake/product.img $internal_root/
+cp -rf $(pwd)/rou/fake/product.img $internal_root/
 fi
 if [ -e $internal_root/system_ext.img ]
 then
 echo " "
 else
-cp -rf ~/rou/fake/system_ext.img $internal_root/
+cp -rf $(pwd)/rou/fake/system_ext.img $internal_root/
 fi
-lpmake --metadata-size 65536 --super-name super --metadata-slots 2 --device super:$(<~/kitchen-tmp/super.txt) --group main:$(<~/kitchen-tmp/main.txt) --partition system:readonly:$(ls -nl $internal_root/system.img | awk '{print $5}'):main --image system=$internal_root/system.img --partition vendor:readonly:$(ls -nl $internal_root/vendor.img | awk '{print $5}'):main --image vendor=$internal_root/vendor.img --partition product:readonly:$(ls -nl $internal_root/product.img | awk '{print $5}'):main --image product=$internal_root/product.img --partition system_ext:readonly:$(ls -nl $internal_root/system_ext.img | awk '{print $5}'):main --image system_ext=$internal_root/system_ext.img --sparse --output super.img
+lpmake --metadata-size 65536 --super-name super --metadata-slots 2 --device super:$(<$(pwd)/kitchen-tmp/super.txt) --group main:$(<$(pwd)/kitchen-tmp/main.txt) --partition system:readonly:$(ls -nl $internal_root/system.img | awk '{print $5}'):main --image system=$internal_root/system.img --partition vendor:readonly:$(ls -nl $internal_root/vendor.img | awk '{print $5}'):main --image vendor=$internal_root/vendor.img --partition product:readonly:$(ls -nl $internal_root/product.img | awk '{print $5}'):main --image product=$internal_root/product.img --partition system_ext:readonly:$(ls -nl $internal_root/system_ext.img | awk '{print $5}'):main --image system_ext=$internal_root/system_ext.img --sparse --output super.img
 else
 echo "No ODM and system_ext in profile"
 fi
@@ -520,8 +520,8 @@ TPUT  10 2; $e "║                                       ║";
 TPUT  11 2; $e "║                                       ║";
 TPUT  12 2; $e "║                                       ║";
 TPUT  13 2; $e "╚═══════════════════════════════════════╝";
-TPUT   6 3; $e "Super size : $(if [ -e ~/kitchen-tmp/super.txt ];then echo "$(<~/kitchen-tmp/super.txt)";fi)"
-TPUT   7 3; $e "For logical size : $(if [ -e ~/kitchen-tmp/main.txt ];then echo "$(<~/kitchen-tmp/main.txt)";fi)"
+TPUT   6 3; $e "Super size : $(if [ -e $(pwd)/kitchen-tmp/super.txt ];then echo "$(<$(pwd)/kitchen-tmp/super.txt)";fi)"
+TPUT   7 3; $e "For logical size : $(if [ -e $(pwd)/kitchen-tmp/main.txt ];then echo "$(<$(pwd)/kitchen-tmp/main.txt)";fi)"
 TPUT   8 3; $e "System size : $(if [ -e $internal_root/system.img ];then ls -nl $internal_root/system.img | awk '{print $5}';fi)"
 TPUT   9 3; $e "Vendor size : $(if [ -e $internal_root/vendor.img ];then ls -nl $internal_root/vendor.img | awk '{print $5}';fi)"
 TPUT  10 3; $e "Product size : $(if [ -e $internal_root/product.img ];then ls -nl $internal_root/product.img | awk '{print $5}';fi)"
@@ -588,8 +588,8 @@ TPUT  10 2; $e "║                                       ║";
 TPUT  11 2; $e "║                                       ║";
 TPUT  12 2; $e "║                                       ║";
 TPUT  13 2; $e "╚═══════════════════════════════════════╝";
-TPUT   6 3; $e "Super size : $(if [ -e ~/kitchen-tmp/super.txt ];then echo "$(<~/kitchen-tmp/super.txt)";fi)"
-TPUT   7 3; $e "For logical size : $(if [ -e ~/kitchen-tmp/main.txt ];then echo "$(<~/kitchen-tmp/main.txt)";fi)"
+TPUT   6 3; $e "Super size : $(if [ -e $(pwd)/kitchen-tmp/super.txt ];then echo "$(<$(pwd)/kitchen-tmp/super.txt)";fi)"
+TPUT   7 3; $e "For logical size : $(if [ -e $(pwd)/kitchen-tmp/main.txt ];then echo "$(<$(pwd)/kitchen-tmp/main.txt)";fi)"
 TPUT   8 3; $e "System size : $(if [ -e $internal_root/system.img ];then ls -nl $internal_root/system.img | awk '{print $5}';fi)"
 TPUT   9 3; $e "Vendor size : $(if [ -e $internal_root/vendor.img ];then ls -nl $internal_root/vendor.img | awk '{print $5}';fi)"
 TPUT  10 3; $e "Product size : $(if [ -e $internal_root/product.img ];then ls -nl $internal_root/product.img | awk '{print $5}';fi)"
@@ -627,7 +627,7 @@ REFRESH(){ after=$((i+1)); before=$((i-1))
         3) S=M3;SC;if [[ $cur == "" ]];then R;clear;main_main;fi;;
  esac;POS;done
 else
-dirf=~/rou/fake/profile
+dirf=$(pwd)/rou/fake/profile
 clear
 TPUT  6 1;ls -x $dirf
 UNMARK
@@ -652,10 +652,10 @@ fontceti
 build_manual
 ;;
 *)
-cp -rf ~/rou/fake/profile/$p ~/kitchen-tmp/
-mv -f ~/kitchen-tmp/$p ~/kitchen-tmp/super_map.txt
-printf "$(<~/kitchen-tmp/super_map.txt)" | grep -e "Size:" | awk '{print $2}' > ~/kitchen-tmp/super.txt
-printf "$(<~/kitchen-tmp/super_map.txt)" | grep -e "Maximum size:" | awk '{print $3}' | sed '2!d' > ~/kitchen-tmp/main.txt
+cp -rf $(pwd)/rou/fake/profile/$p $(pwd)/kitchen-tmp/
+mv -f $(pwd)/kitchen-tmp/$p $(pwd)/kitchen-tmp/super_map.txt
+printf "$(<$(pwd)/kitchen-tmp/super_map.txt)" | grep -e "Size:" | awk '{print $2}' > $(pwd)/kitchen-tmp/super.txt
+printf "$(<$(pwd)/kitchen-tmp/super_map.txt)" | grep -e "Maximum size:" | awk '{print $3}' | sed '2!d' > $(pwd)/kitchen-tmp/main.txt
 clear
 Build_rom
 ;;
@@ -665,7 +665,7 @@ fi
 
 Extract_rom (){
 save_profile (){
-dirf=~/rou/fake/profile
+dirf=$(pwd)/rou/fake/profile
 TPUT  6 1;ls -x $dirf
 UNMARK
 TPUT  1 1;$e " |Profile| ";
@@ -683,7 +683,7 @@ clear
 fontceti
 ;;
 *)
-cp -rf ~/kitchen-tmp/super_map.txt ~/rou/fake/profile/$p
+cp -rf $(pwd)/kitchen-tmp/super_map.txt $(pwd)/rou/fake/profile/$p
 clear
 Build_rom
 ;;
@@ -718,8 +718,8 @@ TPUT  10 2; $e "║                                       ║";
 TPUT  11 2; $e "║                                       ║";
 TPUT  12 2; $e "║                                       ║";
 TPUT  13 2; $e "╚═══════════════════════════════════════╝";
-TPUT   6 3; $e "Super size : $(if [ -e ~/kitchen-tmp/super.txt ];then echo "$(<~/kitchen-tmp/super.txt)";fi)"
-TPUT   7 3; $e "For logical size : $(if [ -e ~/kitchen-tmp/main.txt ];then echo "$(<~/kitchen-tmp/main.txt)";fi)"
+TPUT   6 3; $e "Super size : $(if [ -e $(pwd)/kitchen-tmp/super.txt ];then echo "$(<$(pwd)/kitchen-tmp/super.txt)";fi)"
+TPUT   7 3; $e "For logical size : $(if [ -e $(pwd)/kitchen-tmp/main.txt ];then echo "$(<$(pwd)/kitchen-tmp/main.txt)";fi)"
 TPUT   8 3; $e "System size : $(if [ -e $internal_root/system.img ];then ls -nl $internal_root/system.img | awk '{print $5}';fi)"
 TPUT   9 3; $e "Vendor size : $(if [ -e $internal_root/vendor.img ];then ls -nl $internal_root/vendor.img | awk '{print $5}';fi)"
 TPUT  10 3; $e "Product size : $(if [ -e $internal_root/product.img ];then ls -nl $internal_root/product.img | awk '{print $5}';fi)"
@@ -758,7 +758,7 @@ Extract_browse (){
 $e "\ec\e[37;00m\e[J"
 Alone_a (){
 clear
-dirf="$(echo "$(<~/rou/pc_ext.txt)")"
+dirf="$(echo "$(<$(pwd)/rou/pc_ext.txt)")"
 TPUT  6 1;ls -x $dirf
 MARK2;TPUT 47 1;$e "	                        ";TPUT 47 1;$e "cmd:|select|back|exit|term:";read p;UNMARK;
 case $p in
@@ -772,16 +772,16 @@ clear
 Extract_rom
 ;;
 "back")
-echo "$dirf" | sed 's|\(.*\)/.*|\1|' > ~/rou/pc_ext.txt
-internal_root="$(echo "$(<~/rou/pc_ext.txt)")"
+echo "$dirf" | sed 's|\(.*\)/.*|\1|' > $(pwd)/rou/pc_ext.txt
+internal_root="$(echo "$(<$(pwd)/rou/pc_ext.txt)")"
 Alone_b
 ;;
 "select")
-if [ -e "$(echo "$(<~/rou/pc_ext.txt)" | sed -e 's/\(.tar.md5\)*$//g')".tar.md5 ]
+if [ -e "$(echo "$(<$(pwd)/rou/pc_ext.txt)" | sed -e 's/\(.tar.md5\)*$//g')".tar.md5 ]
 then
 cd ~
 mkdir $internal_root/AP
-7z e "$(echo "$(<~/rou/pc_ext.txt)" | sed -e 's/\(.tar.md5\)*$//g')".tar.md5 -o$internal_root/AP
+7z e "$(echo "$(<$(pwd)/rou/pc_ext.txt)" | sed -e 's/\(.tar.md5\)*$//g')".tar.md5 -o$internal_root/AP
 if [ -e $internal_root/AP/super.img.lz4 ]
 then
 mv -f $internal_root/AP/super.img.lz4 $internal_root/
@@ -791,11 +791,11 @@ fi
 rm -rf $internal_root/AP/
 extract_internal
 else
-if [ -e "$(echo "$(<~/rou/pc_ext.txt)" | sed -e 's/\(.tar\)*$//g')".tar ]
+if [ -e "$(echo "$(<$(pwd)/rou/pc_ext.txt)" | sed -e 's/\(.tar\)*$//g')".tar ]
 then
 cd ~
 mkdir $internal_root/AP
-7z e "$(echo "$(<~/rou/pc_ext.txt)" | sed -e 's/\(.tar\)*$//g')".tar -o$internal_root/AP
+7z e "$(echo "$(<$(pwd)/rou/pc_ext.txt)" | sed -e 's/\(.tar\)*$//g')".tar -o$internal_root/AP
 if [ -e $internal_root/AP/super.img.lz4 ]
 then
 mv -f $internal_root/AP/super.img.lz4 $internal_root/
@@ -811,7 +811,7 @@ fi
 internal_path="$dirf"
 if [ -e $dirf/$p ]
 then
-echo "$dirf/$p" > ~/rou/pc_ext.txt
+echo "$dirf/$p" > $(pwd)/rou/pc_ext.txt
 Alone_b
 else
 Alone_a
@@ -822,7 +822,7 @@ esac
 
 Alone_b (){
 clear
-dirf="$(echo "$(<~/rou/pc_ext.txt)")"
+dirf="$(echo "$(<$(pwd)/rou/pc_ext.txt)")"
 TPUT  6 1;ls -x $dirf
 MARK2;TPUT 47 1;$e "	                        ";TPUT 47 1;$e "cmd:|select|back|exit|term:";read p;UNMARK;
 case $p in
@@ -836,16 +836,16 @@ clear
 Extract_rom
 ;;
 "back")
-echo "$dirf" | sed 's|\(.*\)/.*|\1|' > ~/rou/pc_ext.txt
-internal_root="$(echo "$(<~/rou/pc_ext.txt)")"
+echo "$dirf" | sed 's|\(.*\)/.*|\1|' > $(pwd)/rou/pc_ext.txt
+internal_root="$(echo "$(<$(pwd)/rou/pc_ext.txt)")"
 Alone_b
 ;;
 "select")
-if [ -e "$(echo "$(<~/rou/pc_ext.txt)" | sed -e 's/\(.tar.md5\)*$//g')".tar.md5 ]
+if [ -e "$(echo "$(<$(pwd)/rou/pc_ext.txt)" | sed -e 's/\(.tar.md5\)*$//g')".tar.md5 ]
 then
 cd ~
 mkdir $internal_root/AP
-7z e "$(echo "$(<~/rou/pc_ext.txt)" | sed -e 's/\(.tar.md5\)*$//g')".tar.md5 -o$internal_root/AP
+7z e "$(echo "$(<$(pwd)/rou/pc_ext.txt)" | sed -e 's/\(.tar.md5\)*$//g')".tar.md5 -o$internal_root/AP
 if [ -e $internal_root/AP/super.img.lz4 ]
 then
 mv -f $internal_root/AP/super.img.lz4 $internal_root/
@@ -855,11 +855,11 @@ fi
 rm -rf $internal_root/AP/
 extract_internal
 else
-if [ -e "$(echo "$(<~/rou/pc_ext.txt)" | sed -e 's/\(.tar\)*$//g')".tar ]
+if [ -e "$(echo "$(<$(pwd)/rou/pc_ext.txt)" | sed -e 's/\(.tar\)*$//g')".tar ]
 then
 cd ~
 mkdir $internal_root/AP
-7z e "$(echo "$(<~/rou/pc_ext.txt)" | sed -e 's/\(.tar\)*$//g')".tar -o$internal_root/AP
+7z e "$(echo "$(<$(pwd)/rou/pc_ext.txt)" | sed -e 's/\(.tar\)*$//g')".tar -o$internal_root/AP
 if [ -e $internal_root/AP/super.img.lz4 ]
 then
 mv -f $internal_root/AP/super.img.lz4 $internal_root/
@@ -875,7 +875,7 @@ fi
 internal_path="$dirf"
 if [ -e $dirf/$p ]
 then
-echo "$dirf/$p" > ~/rou/pc_ext.txt
+echo "$dirf/$p" > $(pwd)/rou/pc_ext.txt
 Alone_a
 else
 Alone_b
@@ -913,16 +913,16 @@ clear
 Extract_rom
 ;;
 "back")
-echo "$dirf" | sed 's|\(.*\)/.*|\1|' > ~/rou/pc_ext.txt
-internal_root="$(echo "$(<~/rou/pc_ext.txt)")"
+echo "$dirf" | sed 's|\(.*\)/.*|\1|' > $(pwd)/rou/pc_ext.txt
+internal_root="$(echo "$(<$(pwd)/rou/pc_ext.txt)")"
 Alone_b
 ;;
 "select")
-if [ -e "$(echo "$(<~/rou/pc_ext.txt)" | sed -e 's/\(.tar.md5\)*$//g')".tar.md5 ]
+if [ -e "$(echo "$(<$(pwd)/rou/pc_ext.txt)" | sed -e 's/\(.tar.md5\)*$//g')".tar.md5 ]
 then
 cd ~
 mkdir $internal_root/AP
-7z e "$(echo "$(<~/rou/pc_ext.txt)" | sed -e 's/\(.tar.md5\)*$//g')".tar.md5 -o$internal_root/AP
+7z e "$(echo "$(<$(pwd)/rou/pc_ext.txt)" | sed -e 's/\(.tar.md5\)*$//g')".tar.md5 -o$internal_root/AP
 if [ -e $internal_root/AP/super.img.lz4 ]
 then
 mv -f $internal_root/AP/super.img.lz4 $internal_root/
@@ -932,11 +932,11 @@ fi
 rm -rf $internal_root/AP/
 extract_internal
 else
-if [ -e "$(echo "$(<~/rou/pc_ext.txt)" | sed -e 's/\(.tar\)*$//g')".tar ]
+if [ -e "$(echo "$(<$(pwd)/rou/pc_ext.txt)" | sed -e 's/\(.tar\)*$//g')".tar ]
 then
 cd ~
 mkdir $internal_root/AP
-7z e "$(echo "$(<~/rou/pc_ext.txt)" | sed -e 's/\(.tar\)*$//g')".tar -o$internal_root/AP
+7z e "$(echo "$(<$(pwd)/rou/pc_ext.txt)" | sed -e 's/\(.tar\)*$//g')".tar -o$internal_root/AP
 if [ -e $internal_root/AP/super.img.lz4 ]
 then
 mv -f $internal_root/AP/super.img.lz4 $internal_root/
@@ -952,7 +952,7 @@ fi
 internal_path="$dirf"
 if [ -e $dirf/$p ]
 then
-echo "$dirf/$p" > ~/rou/pc_ext.txt
+echo "$dirf/$p" > $(pwd)/rou/pc_ext.txt
 Alone_a
 else
 Alone_b
@@ -1000,36 +1000,36 @@ fi
 simg2img $internal_root/super.img $internal_root/super_raw.img
 if [ "$(ls -nl $internal_root/super_raw.img | awk '{print $5}')" -lt 100000 ]
 then
-if [ -e ~/rou/only_mode.txt ]
+if [ -e $(pwd)/rou/only_mode.txt ]
 then
 rm -rf $internal_root/super_raw.img 
-lpdump $internal_root/super.img > ~/kitchen-tmp/super_map.txt
-printf "$(<~/kitchen-tmp/super_map.txt)" | grep -e "Size:" | awk '{print $2}' > ~/kitchen-tmp/super.txt
-printf "$(<~/kitchen-tmp/super_map.txt)" | grep -e "Maximum size:" | awk '{print $3}' | sed '2!d' > ~/kitchen-tmp/main.txt
+lpdump $internal_root/super.img > $(pwd)/kitchen-tmp/super_map.txt
+printf "$(<$(pwd)/kitchen-tmp/super_map.txt)" | grep -e "Size:" | awk '{print $2}' > $(pwd)/kitchen-tmp/super.txt
+printf "$(<$(pwd)/kitchen-tmp/super_map.txt)" | grep -e "Maximum size:" | awk '{print $3}' | sed '2!d' > $(pwd)/kitchen-tmp/main.txt
 lpunpack -p vendor $internal_root/super.img $internal_root/
 lpunpack -p odm $internal_root/super.img $internal_root/
 lpunpack -p system_ext $internal_root/super.img $internal_root/
 else
 rm -rf $internal_root/super_raw.img 
-lpdump $internal_root/super.img > ~/kitchen-tmp/super_map.txt
-printf "$(<~/kitchen-tmp/super_map.txt)" | grep -e "Size:" | awk '{print $2}' > ~/kitchen-tmp/super.txt
-printf "$(<~/kitchen-tmp/super_map.txt)" | grep -e "Maximum size:" | awk '{print $3}' | sed '2!d' > ~/kitchen-tmp/main.txt
+lpdump $internal_root/super.img > $(pwd)/kitchen-tmp/super_map.txt
+printf "$(<$(pwd)/kitchen-tmp/super_map.txt)" | grep -e "Size:" | awk '{print $2}' > $(pwd)/kitchen-tmp/super.txt
+printf "$(<$(pwd)/kitchen-tmp/super_map.txt)" | grep -e "Maximum size:" | awk '{print $3}' | sed '2!d' > $(pwd)/kitchen-tmp/main.txt
 lpunpack $internal_root/super.img $internal_root/
 fi
 else
-if [ -e ~/rou/only_mode.txt ]
+if [ -e $(pwd)/rou/only_mode.txt ]
 then
 rm -rf $internal_root/super.img
-lpdump $internal_root/super_raw.img > ~/kitchen-tmp/super_map.txt
-printf "$(<~/kitchen-tmp/super_map.txt)" | grep -e "Size:" | awk '{print $2}' > ~/kitchen-tmp/super.txt
-printf "$(<~/kitchen-tmp/super_map.txt)" | grep -e "Maximum size:" | awk '{print $3}' | sed '2!d' > ~/kitchen-tmp/main.txt
+lpdump $internal_root/super_raw.img > $(pwd)/kitchen-tmp/super_map.txt
+printf "$(<$(pwd)/kitchen-tmp/super_map.txt)" | grep -e "Size:" | awk '{print $2}' > $(pwd)/kitchen-tmp/super.txt
+printf "$(<$(pwd)/kitchen-tmp/super_map.txt)" | grep -e "Maximum size:" | awk '{print $3}' | sed '2!d' > $(pwd)/kitchen-tmp/main.txt
 lpunpack -p vendor $internal_root/super_raw.img $internal_root/
 lpunpack -p odm $internal_root/super_raw.img $internal_root/
 else
 rm -rf $internal_root/super.img
-lpdump $internal_root/super_raw.img > ~/kitchen-tmp/super_map.txt
-printf "$(<~/kitchen-tmp/super_map.txt)" | grep -e "Size:" | awk '{print $2}' > ~/kitchen-tmp/super.txt
-printf "$(<~/kitchen-tmp/super_map.txt)" | grep -e "Maximum size:" | awk '{print $3}' | sed '2!d' > ~/kitchen-tmp/main.txt
+lpdump $internal_root/super_raw.img > $(pwd)/kitchen-tmp/super_map.txt
+printf "$(<$(pwd)/kitchen-tmp/super_map.txt)" | grep -e "Size:" | awk '{print $2}' > $(pwd)/kitchen-tmp/super.txt
+printf "$(<$(pwd)/kitchen-tmp/super_map.txt)" | grep -e "Maximum size:" | awk '{print $3}' | sed '2!d' > $(pwd)/kitchen-tmp/main.txt
 lpunpack $internal_root/super_raw.img $internal_root/
 fi
 fi
@@ -1040,18 +1040,18 @@ extract_root (){
 if [ "$(id -u)" != "0" ]; then
 echo "This script must be run as root" 1>&2
 else
-if [ -e ~/rou/only_mode.txt ]
+if [ -e $(pwd)/rou/only_mode.txt ]
 then
-lpdump /dev/block/by-name/super > ~/kitchen-tmp/super_map.txt
-printf "$(<~/kitchen-tmp/super_map.txt)" | grep -e "Size:" | awk '{print $2}' > ~/kitchen-tmp/super.txt
-printf "$(<~/kitchen-tmp/super_map.txt)" | grep -e "Maximum size:" | awk '{print $3}' | sed '2!d' > ~/kitchen-tmp/main.txt
+lpdump /dev/block/by-name/super > $(pwd)/kitchen-tmp/super_map.txt
+printf "$(<$(pwd)/kitchen-tmp/super_map.txt)" | grep -e "Size:" | awk '{print $2}' > $(pwd)/kitchen-tmp/super.txt
+printf "$(<$(pwd)/kitchen-tmp/super_map.txt)" | grep -e "Maximum size:" | awk '{print $3}' | sed '2!d' > $(pwd)/kitchen-tmp/main.txt
 dd if=/dev/block/mapper/vendor of=$internal_root/vendor.img
 dd if=/dev/block/mapper/odm of=$internal_root/odm.img
 dd if=/dev/block/mapper/system_ext of=$internal_root/system_ext.img
 else
-lpdump /dev/block/by-name/super > ~/kitchen-tmp/super_map.txt
-printf "$(<~/kitchen-tmp/super_map.txt)" | grep -e "Size:" | awk '{print $2}' > ~/kitchen-tmp/super.txt
-printf "$(<~/kitchen-tmp/super_map.txt)" | grep -e "Maximum size:" | awk '{print $3}' | sed '2!d' > ~/kitchen-tmp/main.txt
+lpdump /dev/block/by-name/super > $(pwd)/kitchen-tmp/super_map.txt
+printf "$(<$(pwd)/kitchen-tmp/super_map.txt)" | grep -e "Size:" | awk '{print $2}' > $(pwd)/kitchen-tmp/super.txt
+printf "$(<$(pwd)/kitchen-tmp/super_map.txt)" | grep -e "Maximum size:" | awk '{print $3}' | sed '2!d' > $(pwd)/kitchen-tmp/main.txt
 lpunpack /dev/block/by-name/super $internal_root/
 fi
 fi
@@ -1087,8 +1087,8 @@ TPUT  10 2; $e "║                                       ║";
 TPUT  11 2; $e "║                                       ║";
 TPUT  12 2; $e "║                                       ║";
 TPUT  13 2; $e "╚═══════════════════════════════════════╝";
-TPUT   6 3; $e "Super size : $(if [ -e ~/kitchen-tmp/super.txt ];then echo "$(<~/kitchen-tmp/super.txt)";fi)"
-TPUT   7 3; $e "For logical size : $(if [ -e ~/kitchen-tmp/main.txt ];then echo "$(<~/kitchen-tmp/main.txt)";fi)"
+TPUT   6 3; $e "Super size : $(if [ -e $(pwd)/kitchen-tmp/super.txt ];then echo "$(<$(pwd)/kitchen-tmp/super.txt)";fi)"
+TPUT   7 3; $e "For logical size : $(if [ -e $(pwd)/kitchen-tmp/main.txt ];then echo "$(<$(pwd)/kitchen-tmp/main.txt)";fi)"
 TPUT   8 3; $e "System size : $(if [ -e $internal_root/system.img ];then ls -nl $internal_root/system.img | awk '{print $5}';fi)"
 TPUT   9 3; $e "Vendor size : $(if [ -e $internal_root/vendor.img ];then ls -nl $internal_root/vendor.img | awk '{print $5}';fi)"
 TPUT  10 3; $e "Product size : $(if [ -e $internal_root/product.img ];then ls -nl $internal_root/product.img | awk '{print $5}';fi)"
@@ -1129,7 +1129,7 @@ REFRESH(){ after=$((i+1)); before=$((i-1))
 
 clear_kitchen (){
 Build_remove (){
-rm -rf ~/build-kitchen/*
+rm -rf $(pwd)/build-kitchen/*
 
 clear
       E='echo -e';e='echo -en';trap "R;exit" 2
@@ -1189,7 +1189,7 @@ REFRESH(){ after=$((i+1)); before=$((i-1))
  }
 
 profile_remove (){
-rm -rf ~/kitchen-tmp
+rm -rf $(pwd)/kitchen-tmp
 
 clear
       E='echo -e';e='echo -en';trap "R;exit" 2
@@ -1220,7 +1220,7 @@ TPUT  12 2; $e "║                                       ║";
 TPUT  13 2; $e "╚═══════════════════════════════════════╝";
 TPUT   6 3; $e "Super image kitchen GUI"
 TPUT   7 3; $e "by TakuruKagami"
-TPUT   9 3; $e "$(if [ -e ~/kitchen-tmp/super.txt ];then echo "Faild remove";else echo "Profile removed";fi)";
+TPUT   9 3; $e "$(if [ -e $(pwd)/kitchen-tmp/super.txt ];then echo "Faild remove";else echo "Profile removed";fi)";
 MARK;TPUT  14 3; $e "                                         ";TPUT  13 43; $e " ";TPUT  12 43; $e " ";TPUT  11 43; $e " ";TPUT  10 43; $e " ";TPUT  9 43; $e " ";TPUT  8 43; $e " ";TPUT  7 43; $e " ";TPUT  6 43; $e " ";UNMARK;}
    FOOT2(){ UNMARK;TPUT 3 45
    printf "$set_info";}
@@ -1254,7 +1254,7 @@ Change_path (){
 $e "\ec\e[37;00m\e[J"
 close_course_a (){
 clear
-dirf="$(echo "$(<~/rou/temp_pc.txt)")" 
+dirf="$(echo "$(<$(pwd)/rou/temp_pc.txt)")" 
 TPUT  6 1;ls -x $dirf
 
 UNMARK
@@ -1270,31 +1270,31 @@ clear
 clear_kitchen
 ;;
 "back")
-echo "$dirf" | sed 's|\(.*\)/.*|\1|' > ~/rou/temp_pc.txt
-internal_root="$(echo "$(<~/rou/temp_pc.txt)")"
+echo "$dirf" | sed 's|\(.*\)/.*|\1|' > $(pwd)/rou/temp_pc.txt
+internal_root="$(echo "$(<$(pwd)/rou/temp_pc.txt)")"
 close_course_b
 ;;
 "select")
-echo "$dirf" > ~/rou/pc.txt
-internal_root="$(echo "$(<~/rou/pc.txt)")"
-echo "binary installed" > ~/rou/complete.txt
+echo "$dirf" > $(pwd)/rou/pc.txt
+internal_root="$(echo "$(<$(pwd)/rou/pc.txt)")"
+echo "binary installed" > $(pwd)/rou/complete.txt
 ;;
 *)
 if [ -e $dirf/$p ]
 then
-echo "$dirf/$p" > ~/rou/temp_pc.txt
+echo "$dirf/$p" > $(pwd)/rou/temp_pc.txt
 close_course_b
 else
 main_main
 fi
 ;;
 esac
-echo "binary installed" > ~/rou/complete.txt
+echo "binary installed" > $(pwd)/rou/complete.txt
 }
 
 close_course_b (){
 clear
-dirf="$(echo "$(<~/rou/temp_pc.txt)")"
+dirf="$(echo "$(<$(pwd)/rou/temp_pc.txt)")"
 TPUT  6 1;ls -x $dirf
 
 UNMARK
@@ -1310,26 +1310,26 @@ clear
 clear_kitchen
 ;;
 "back")
-echo "$dirf" | sed 's|\(.*\)/.*|\1|' > ~/rou/temp_pc.txt
-internal_root="$(echo "$(<~/rou/temp_pc.txt)")"
+echo "$dirf" | sed 's|\(.*\)/.*|\1|' > $(pwd)/rou/temp_pc.txt
+internal_root="$(echo "$(<$(pwd)/rou/temp_pc.txt)")"
 close_course_a
 ;;
 "select")
-echo "$dirf" > ~/rou/pc.txt
-internal_root="$(echo "$(<~/rou/pc.txt)")"
-echo "binary installed" > ~/rou/complete.txt
+echo "$dirf" > $(pwd)/rou/pc.txt
+internal_root="$(echo "$(<$(pwd)/rou/pc.txt)")"
+echo "binary installed" > $(pwd)/rou/complete.txt
 ;;
 *)
 if [ -e $dirf/$p ]
 then
-echo "$dirf/$p" > ~/rou/temp_pc.txt
+echo "$dirf/$p" > $(pwd)/rou/temp_pc.txt
 close_course_a
 else
 main_main
 fi
 ;;
 esac
-echo "binary installed" > ~/rou/complete.txt
+echo "binary installed" > $(pwd)/rou/complete.txt
 }
 
 clear
@@ -1366,34 +1366,34 @@ clear
 clear_kitchen
 ;;
 "back")
-echo "$dirf" | sed 's|\(.*\)/.*|\1|' > ~/rou/temp_pc.txt
-internal_root="$(echo "$(<~/rou/temp_pc.txt)")"
+echo "$dirf" | sed 's|\(.*\)/.*|\1|' > $(pwd)/rou/temp_pc.txt
+internal_root="$(echo "$(<$(pwd)/rou/temp_pc.txt)")"
 close_course_a
 ;;
 "select")
-echo "$dirf" > ~/rou/pc.txt
-internal_root="$(echo "$(<~/rou/pc.txt)")"
-echo "binary installed" > ~/rou/complete.txt
+echo "$dirf" > $(pwd)/rou/pc.txt
+internal_root="$(echo "$(<$(pwd)/rou/pc.txt)")"
+echo "binary installed" > $(pwd)/rou/complete.txt
 ;;
 *)
 if [ -e $dirf/$p ]
 then
-echo "$dirf/$p" > ~/rou/temp_pc.txt
+echo "$dirf/$p" > $(pwd)/rou/temp_pc.txt
 close_course_a
 else
 main_main
 fi
 ;;
 esac
-echo "binary installed" > ~/rou/complete.txt
+echo "binary installed" > $(pwd)/rou/complete.txt
 }
 
 switch_unpack (){
-if [ -e ~/rou/only_mode.txt ]
+if [ -e $(pwd)/rou/only_mode.txt ]
 then
-rm -rf ~/rou/only_mode.txt
+rm -rf $(pwd)/rou/only_mode.txt
 else
-echo " " > ~/rou/only_mode.txt
+echo " " > $(pwd)/rou/only_mode.txt
 fi
 }
 
@@ -1426,8 +1426,8 @@ TPUT  12 2; $e "║                                       ║";
 TPUT  13 2; $e "╚═══════════════════════════════════════╝";
 TPUT   6 3; $e "Super image kitchen GUI"
 TPUT   7 3; $e "by TakuruKagami"
-TPUT   9 3; $e "Profile :$(if [ -e ~/kitchen-tmp/super.txt ];then echo "Exist";else echo "No";fi)"
-TPUT  10 3; $e "Extract odm vendor only :$(if [ -e ~/rou/only_mode.txt ];then echo "Yes";else echo "No";fi)"
+TPUT   9 3; $e "Profile :$(if [ -e $(pwd)/kitchen-tmp/super.txt ];then echo "Exist";else echo "No";fi)"
+TPUT  10 3; $e "Extract odm vendor only :$(if [ -e $(pwd)/rou/only_mode.txt ];then echo "Yes";else echo "No";fi)"
 MARK;TPUT  14 3; $e "                                         ";TPUT  13 43; $e " ";TPUT  12 43; $e " ";TPUT  11 43; $e " ";TPUT  10 43; $e " ";TPUT  9 43; $e " ";TPUT  8 43; $e " ";TPUT  7 43; $e " ";TPUT  6 43; $e " ";UNMARK;}
    FOOT2(){ UNMARK;TPUT 3 45
    printf "$set_info";}
@@ -1495,67 +1495,67 @@ MARK;TPUT  14 3; $e "                                         ";TPUT  13 43; $e 
    FOOT2(){ UNMARK;TPUT 3 45
    printf "$set_info";}
    
-if [ -e ~/rou/complete.txt ]
+if [ -e $(pwd)/rou/complete.txt ]
 then
 if [ "$(getprop ro.product.cpu.abi)" == "armeabi-v7a" ]
 then
-internal_root="$(echo "$(<~/rou/pc.txt)")"
+internal_root="$(echo "$(<$(pwd)/rou/pc.txt)")"
 else
 if [ "$(getprop ro.product.cpu.abi)" == "arm64-v8a" ]
 then
-internal_root="$(echo "$(<~/rou/pc.txt)")"
+internal_root="$(echo "$(<$(pwd)/rou/pc.txt)")"
 else
 if [ "$(dpkg --print-architecture)" == "amd64" ]
 then
-internal_root="$(echo "$(<~/rou/pc.txt)")"
+internal_root="$(echo "$(<$(pwd)/rou/pc.txt)")"
 else
-internal_root="$(echo "$(<~/rou/pc.txt)")"
+internal_root="$(echo "$(<$(pwd)/rou/pc.txt)")"
 fi
 fi
 fi
 else
 if [ "$(getprop ro.product.cpu.abi)" == "armeabi-v7a" ]
 then
-dpkg -i ~/rou/deb/arm32/android-tools.deb
-dpkg -i ~/rou/deb/arm32/abseil-cpp.deb
-dpkg -i ~/rou/deb/arm32/brotli.deb
-dpkg -i ~/rou/deb/arm32/liblz4.deb
-dpkg -i ~/rou/deb/arm32/libprotobuff.deb
-dpkg -i ~/rou/deb/arm32/lz4.deb
-dpkg -i ~/rou/deb/arm32/libusb.deb
-dpkg -i ~/rou/deb/arm32/zstd.deb
-dpkg -i ~/rou/deb/arm32/p7zip.deb
-echo "/storage/emulated/0/build-kitchen" > ~/rou/pc.txt
-internal_root="$(echo "$(<~/rou/pc.txt)")"
-echo "binary installed" > ~/rou/complete.txt
+dpkg -i $(pwd)/rou/deb/arm32/android-tools.deb
+dpkg -i $(pwd)/rou/deb/arm32/abseil-cpp.deb
+dpkg -i $(pwd)/rou/deb/arm32/brotli.deb
+dpkg -i $(pwd)/rou/deb/arm32/liblz4.deb
+dpkg -i $(pwd)/rou/deb/arm32/libprotobuff.deb
+dpkg -i $(pwd)/rou/deb/arm32/lz4.deb
+dpkg -i $(pwd)/rou/deb/arm32/libusb.deb
+dpkg -i $(pwd)/rou/deb/arm32/zstd.deb
+dpkg -i $(pwd)/rou/deb/arm32/p7zip.deb
+echo "/storage/emulated/0/build-kitchen" > $(pwd)/rou/pc.txt
+internal_root="$(echo "$(<$(pwd)/rou/pc.txt)")"
+echo "binary installed" > $(pwd)/rou/complete.txt
 termux-setup-storage
 else
 if [ "$(getprop ro.product.cpu.abi)" == "arm64-v8a" ]
 then
-dpkg -i ~/rou/deb/arm64/android-tools.deb
-dpkg -i ~/rou/deb/arm64/abseil-cpp.deb
-dpkg -i ~/rou/deb/arm64/brotli.deb
-dpkg -i ~/rou/deb/arm64/liblz4.deb
-dpkg -i ~/rou/deb/arm64/libprotobuff.deb
-dpkg -i ~/rou/deb/arm64/lz4.deb
-dpkg -i ~/rou/deb/arm64/libusb.deb
-dpkg -i ~/rou/deb/arm64/zstd.deb
-dpkg -i ~/rou/deb/arm64/p7zip.deb
-echo "/storage/emulated/0/build-kitchen" > ~/rou/pc.txt
-internal_root="$(echo "$(<~/rou/pc.txt)")"
-echo "binary installed" > ~/rou/complete.txt
+dpkg -i $(pwd)/rou/deb/arm64/android-tools.deb
+dpkg -i $(pwd)/rou/deb/arm64/abseil-cpp.deb
+dpkg -i $(pwd)/rou/deb/arm64/brotli.deb
+dpkg -i $(pwd)/rou/deb/arm64/liblz4.deb
+dpkg -i $(pwd)/rou/deb/arm64/libprotobuff.deb
+dpkg -i $(pwd)/rou/deb/arm64/lz4.deb
+dpkg -i $(pwd)/rou/deb/arm64/libusb.deb
+dpkg -i $(pwd)/rou/deb/arm64/zstd.deb
+dpkg -i $(pwd)/rou/deb/arm64/p7zip.deb
+echo "/storage/emulated/0/build-kitchen" > $(pwd)/rou/pc.txt
+internal_root="$(echo "$(<$(pwd)/rou/pc.txt)")"
+echo "binary installed" > $(pwd)/rou/complete.txt
 termux-setup-storage
 else
 if [ "$(dpkg --print-architecture)" == "amd64" ]
 then
-cp -f ~/rou/deb/PC/* /bin
+cp -f $(pwd)/rou/deb/PC/* /bin
 clear
-echo "/" > ~/rou/pc.txt
-internal_root="$(echo "$(<~/rou/pc.txt)")"
+echo "/" > $(pwd)/rou/pc.txt
+internal_root="$(echo "$(<$(pwd)/rou/pc.txt)")"
 $e "\ec\e[37;00m\e[J"
 close_course_a (){
 clear
-dirf="$(echo "$(<~/rou/temp_pc.txt)")" 
+dirf="$(echo "$(<$(pwd)/rou/temp_pc.txt)")" 
 TPUT  6 1;ls -x $dirf
 
 UNMARK
@@ -1571,18 +1571,18 @@ clear
 exit
 ;;
 "back")
-echo "$dirf" | sed 's|\(.*\)/.*|\1|' > ~/rou/temp_pc.txt
-internal_root="$(echo "$(<~/rou/temp_pc.txt)")"
+echo "$dirf" | sed 's|\(.*\)/.*|\1|' > $(pwd)/rou/temp_pc.txt
+internal_root="$(echo "$(<$(pwd)/rou/temp_pc.txt)")"
 close_course_b
 ;;
 "select")
-echo "$dirf" > ~/rou/pc.txt
-internal_root="$(echo "$(<~/rou/pc.txt)")"
+echo "$dirf" > $(pwd)/rou/pc.txt
+internal_root="$(echo "$(<$(pwd)/rou/pc.txt)")"
 ;;
 *)
 if [ -e $dirf/$p ]
 then
-echo "$dirf/$p" > ~/rou/temp_pc.txt
+echo "$dirf/$p" > $(pwd)/rou/temp_pc.txt
 close_course_b
 else
 main_main
@@ -1593,7 +1593,7 @@ esac
 
 close_course_b (){
 clear
-dirf="$(echo "$(<~/rou/temp_pc.txt)")"
+dirf="$(echo "$(<$(pwd)/rou/temp_pc.txt)")"
 TPUT  6 1;ls -x $dirf
 
 UNMARK
@@ -1609,18 +1609,18 @@ clear
 exit
 ;;
 "back")
-echo "$dirf" | sed 's|\(.*\)/.*|\1|' > ~/rou/temp_pc.txt
-internal_root="$(echo "$(<~/rou/temp_pc.txt)")"
+echo "$dirf" | sed 's|\(.*\)/.*|\1|' > $(pwd)/rou/temp_pc.txt
+internal_root="$(echo "$(<$(pwd)/rou/temp_pc.txt)")"
 close_course_a
 ;;
 "select")
-echo "$dirf" > ~/rou/pc.txt
-internal_root="$(echo "$(<~/rou/pc.txt)")"
+echo "$dirf" > $(pwd)/rou/pc.txt
+internal_root="$(echo "$(<$(pwd)/rou/pc.txt)")"
 ;;
 *)
 if [ -e $dirf/$p ]
 then
-echo "$dirf/$p" > ~/rou/temp_pc.txt
+echo "$dirf/$p" > $(pwd)/rou/temp_pc.txt
 close_course_a
 else
 main_main
@@ -1646,44 +1646,47 @@ clear
 exit
 ;;
 "back")
-echo "$dirf" | sed 's|\(.*\)/.*|\1|' > ~/rou/temp_pc.txt
-internal_root="$(echo "$(<~/rou/temp_pc.txt)")"
+echo "$dirf" | sed 's|\(.*\)/.*|\1|' > $(pwd)/rou/temp_pc.txt
+internal_root="$(echo "$(<$(pwd)/rou/temp_pc.txt)")"
 close_course_a
 ;;
 "select")
-echo "$dirf" > ~/rou/pc.txt
-internal_root="$(echo "$(<~/rou/pc.txt)")"
+echo "$dirf" > $(pwd)/rou/pc.txt
+internal_root="$(echo "$(<$(pwd)/rou/pc.txt)")"
 ;;
 *)
 if [ -e $dirf/$p ]
 then
-echo "$dirf/$p" > ~/rou/temp_pc.txt
+echo "$dirf/$p" > $(pwd)/rou/temp_pc.txt
 close_course_a
 else
 main_main
 fi
 ;;
 esac
-chmod +x ~/rou/deb/PC/*
-cp ~/rou/deb/PC/* /bin
-chmod +x /bin/lpmake
-chmod +x /bin/lpunpack
-chmod +x /bin/lpadd
-chmod +x /bin/lpdump
+chmod +x $(pwd)/rou/deb/PC/*
+cp $(pwd)/rou/deb/PC/* /bin
+chmod +x $(pwd)/bin/lpmake
+chmod +x $(pwd)/bin/lpunpack
+chmod +x $(pwd)/bin/lpadd
+chmod +x $(pwd)/bin/lpdump
 apt install android-sdk-libsparse-utils
 sudo apt-get update --fix-missing
 sudo apt-get install --fix-missing
 apt install android-sdk-libsparse-utils
 apt install p7zip-full
 apt install lz4
-echo "binary installed" > ~/rou/complete.txt
+sudo pacman -S android-tools
+sudo pacman -S p7zip
+sudo pacman -S lz4
+echo "binary installed" > $(pwd)/rou/complete.txt
 else
-echo "/" > ~/rou/pc.txt
-internal_root="$(echo "$(<~/rou/pc.txt)")"
+echo "/" > $(pwd)/rou/pc.txt
+internal_root="$(echo "$(<$(pwd)/rou/pc.txt)")"
 $e "\ec\e[37;00m\e[J"
 close_course_a (){
 clear
-dirf="$(echo "$(<~/rou/temp_pc.txt)")" 
+dirf="$(echo "$(<$(pwd)/rou/temp_pc.txt)")" 
 TPUT  6 1;ls -x $dirf
 
 UNMARK
@@ -1699,18 +1702,18 @@ clear
 exit
 ;;
 "back")
-echo "$dirf" | sed 's|\(.*\)/.*|\1|' > ~/rou/temp_pc.txt
-internal_root="$(echo "$(<~/rou/temp_pc.txt)")"
+echo "$dirf" | sed 's|\(.*\)/.*|\1|' > $(pwd)/rou/temp_pc.txt
+internal_root="$(echo "$(<$(pwd)/rou/temp_pc.txt)")"
 close_course_b
 ;;
 "select")
-echo "$dirf" > ~/rou/pc.txt
-internal_root="$(echo "$(<~/rou/pc.txt)")"
+echo "$dirf" > $(pwd)/rou/pc.txt
+internal_root="$(echo "$(<$(pwd)/rou/pc.txt)")"
 ;;
 *)
 if [ -e $dirf/$p ]
 then
-echo "$dirf/$p" > ~/rou/temp_pc.txt
+echo "$dirf/$p" > $(pwd)/rou/temp_pc.txt
 close_course_b
 else
 main_main
@@ -1721,7 +1724,7 @@ esac
 
 close_course_b (){
 clear
-dirf="$(echo "$(<~/rou/temp_pc.txt)")"
+dirf="$(echo "$(<$(pwd)/rou/temp_pc.txt)")"
 TPUT  6 1;ls -x $dirf
 
 UNMARK
@@ -1737,18 +1740,18 @@ clear
 exit
 ;;
 "back")
-echo "$dirf" | sed 's|\(.*\)/.*|\1|' > ~/rou/temp_pc.txt
-internal_root="$(echo "$(<~/rou/temp_pc.txt)")"
+echo "$dirf" | sed 's|\(.*\)/.*|\1|' > $(pwd)/rou/temp_pc.txt
+internal_root="$(echo "$(<$(pwd)/rou/temp_pc.txt)")"
 close_course_a
 ;;
 "select")
-echo "$dirf" > ~/rou/pc.txt
-internal_root="$(echo "$(<~/rou/pc.txt)")"
+echo "$dirf" > $(pwd)/rou/pc.txt
+internal_root="$(echo "$(<$(pwd)/rou/pc.txt)")"
 ;;
 *)
 if [ -e $dirf/$p ]
 then
-echo "$dirf/$p" > ~/rou/temp_pc.txt
+echo "$dirf/$p" > $(pwd)/rou/temp_pc.txt
 close_course_a
 else
 main_main
@@ -1773,53 +1776,56 @@ clear
 exit
 ;;
 "back")
-echo "$dirf" | sed 's|\(.*\)/.*|\1|' > ~/rou/temp_pc.txt
-internal_root="$(echo "$(<~/rou/temp_pc.txt)")"
+echo "$dirf" | sed 's|\(.*\)/.*|\1|' > $(pwd)/rou/temp_pc.txt
+internal_root="$(echo "$(<$(pwd)/rou/temp_pc.txt)")"
 close_course_a
 ;;
 "select")
-echo "$dirf" > ~/rou/pc.txt
-internal_root="$(echo "$(<~/rou/pc.txt)")"
+echo "$dirf" > $(pwd)/rou/pc.txt
+internal_root="$(echo "$(<$(pwd)/rou/pc.txt)")"
 ;;
 *)
 if [ -e $dirf/$p ]
 then
-echo "$dirf/$p" > ~/rou/temp_pc.txt
+echo "$dirf/$p" > $(pwd)/rou/temp_pc.txt
 close_course_a
 else
 main_main
 fi
 ;;
 esac
-chmod +x ~/rou/deb/PC/*
-cp ~/rou/deb/PC/* /bin
-chmod +x /bin/lpmake
-chmod +x /bin/lpunpack
-chmod +x /bin/lpadd
-chmod +x /bin/lpdump
+chmod +x $(pwd)/rou/deb/PC/*
+cp $(pwd)/rou/deb/PC/* /bin
+chmod +x $(pwd)/bin/lpmake
+chmod +x $(pwd)/bin/lpunpack
+chmod +x $(pwd)/bin/lpadd
+chmod +x $(pwd)/bin/lpdump
 apt install android-sdk-libsparse-utils
 sudo apt-get update --fix-missing
 sudo apt-get install --fix-missing
 apt install android-sdk-libsparse-utils
 apt install p7zip-full
 apt install lz4
-echo "binary installed" > ~/rou/complete.txt
+sudo pacman -S android-tools
+sudo pacman -S p7zip
+sudo pacman -S lz4
+echo "binary installed" > $(pwd)/rou/complete.txt
 fi
 fi
 fi
-echo " " > ~/rou/only_mode.txt
+echo " " > $(pwd)/rou/only_mode.txt
 fi
 
-cd ~/
-mkdir ~/kitchen-tmp
+cd $(pwd)/
+mkdir $(pwd)/kitchen-tmp
 mkdir $internal_root
 internal_tmp=$internal_root
-main_tmp=~/kitchen-tmp
-mkdir ~/kitchen-tmp
-ln -s $internal_root ~/
-ln -s ~/rou/toolbox.sh ~/
-ln -s ~/rou/toolbox.sh /bin
-ln -s ~/rou/toolbox.sh /data/data/com.termux/files/usr/bin
+main_tmp=$(pwd)/kitchen-tmp
+mkdir $(pwd)/kitchen-tmp
+ln -s $internal_root $(pwd)/
+ln -s $(pwd)/rou/toolbox.sh $(pwd)/
+ln -s $(pwd)/rou/toolbox.sh /bin
+ln -s $(pwd)/rou/toolbox.sh /data/data/com.termux/files/usr/bin
 clear
 super_info=" "
 clear
